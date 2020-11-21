@@ -1,9 +1,6 @@
-# This is a sample Python script.
 import json
 import xlsxwriter
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 filePath = '一号标.har'
 requestUrl = 'http://www.fjhyyb.cn/Ocean863Web_MAIN/AjaxHandler/OceanObservation.ashx'
 translation = {'YXLG': '有效浪高', 'ZDLG': '最大浪高', 'PJFS': '平均风速', 'ZDFS': '最大风速'}
@@ -63,6 +60,5 @@ def data_processing():
     print('\n===================================end===================================')
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     data_processing()
