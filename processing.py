@@ -64,7 +64,7 @@ class OceanData:
             har_dict = json.loads(readObj.read())
             request_list = har_dict['log']['entries']
             request_list.reverse()
-        workbook = xlsxwriter.Workbook(self.file_name[:-4] + '.' + self.file_type)
+        workbook = xlsxwriter.Workbook(self.file_path[:-4] + '.' + self.file_type)
         print('please wait')
         self.output += generate_xlsx("YXLG", request_list, workbook)
         self.output += generate_xlsx("PJFS", request_list, workbook)

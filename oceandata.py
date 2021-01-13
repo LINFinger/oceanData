@@ -22,8 +22,8 @@ class OceanDataProcess:
         self.ui.pathEdit.setText(file_path)
 
     def outputFile(self):
-        self.ui.console.setPlainText(
-            '==================================start==================================\n')
+        self.ui.console.append(
+            '==================================start==================================')
         file_path = self.ui.pathEdit.text()
         file_type = self.ui.typeComboBox.currentText()
         self.ui.console.append(f'har文件路径 : {file_path}\n\n导出文件格式 : {file_type}')
@@ -32,7 +32,8 @@ class OceanDataProcess:
         od.dataProcessing()
         self.ui.console.append(od.getOutput())
         self.ui.console.append(
-            '===================================end===================================')
+            '===================================end===================================\n')
+        self.ui.console.ensureCursorVisible()
 
 
 if __name__ == '__main__':
