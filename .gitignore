@@ -1,5 +1,6 @@
-# 忽略.idea文件夹
+# 忽略.idea ; __pycache__文件夹
 /.idea/
+/__pycache__/
 
 # 忽略所有.xlsx文件
 *.xlsx

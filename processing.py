@@ -1,7 +1,6 @@
 import json
 import xlsxwriter
 
-filePath = '一号标.har'
 requestUrl = 'http://www.fjhyyb.cn/Ocean863Web_MAIN/AjaxHandler/OceanObservation.ashx'
 translation = {'YXLG': '有效浪高', 'ZDLG': '最大浪高', 'PJFS': '平均风速', 'ZDFS': '最大风速'}
 
@@ -19,6 +18,7 @@ def time_revise(timestr):
 
 
 def generate_xlsx(text_type, lists, workbook):
+    return_strings = ''
     result_strings = ''
     text_type_list = []
     for item in lists:
@@ -34,7 +34,7 @@ def generate_xlsx(text_type, lists, workbook):
     else:
         data_list = [result_list[0]["data"][0]["data"]]
     for no, list_item in enumerate(data_list):
-        worksheet = workbook.add_worksheet(filePath[:-4] + translation.get(text_type_list[3 + no]['value'], 'unset'))
+        worksheet = workbook.add_worksheet(translation.get(text_type_list[3 + no]['value'], 'unset'))
         for n, data in enumerate(list_item):
             time_start = 10
             time_end = data[0].index(')')
@@ -43,22 +43,34 @@ def generate_xlsx(text_type, lists, workbook):
             worksheet.write('A' + str(n + 1), n)
             worksheet.write('B' + str(n + 1), time_revise(data[0][time_start:time_end]))
             worksheet.write('C' + str(n + 1), string_to_float(data[0][value_start:value_end]))
-        print(f'generate sheet"{translation.get(text_type_list[3 + no]["value"], "unset")}" successfully')
+        strings = f'generate sheet"{translation.get(text_type_list[3 + no]["value"], "unset")}" successfully'
+        print(strings)
+        return_strings += (strings + '\n')
+    return return_strings
 
 
-def data_processing():
-    print('==================================start==================================\n')
-    with open(filePath, 'r', encoding='utf-8') as readObj:
-        har_dict = json.loads(readObj.read())
-        request_list = har_dict['log']['entries']
-        request_list.reverse()
-    workbook = xlsxwriter.Workbook(filePath[:-4] + '.xlsx')
-    print('please wait')
-    generate_xlsx("YXLG", request_list, workbook)
-    generate_xlsx("PJFS", request_list, workbook)
-    workbook.close()
-    print('\n===================================end===================================')
+class OceanData:
 
+    def __init__(self, filepath, filetype):
+        self.file_path = filepath
+        self.file_type = filetype
+        self.file_name = filepath.split('/')[-1]
+        self.output = ''
 
-if __name__ == '__main__':
-    data_processing()
+    def dataProcessing(self):
+        self.output = ''
+        print('==================================start==================================\n')
+        with open(self.file_path, 'r', encoding='utf-8') as readObj:
+            har_dict = json.loads(readObj.read())
+            request_list = har_dict['log']['entries']
+            request_list.reverse()
+        workbook = xlsxwriter.Workbook(self.file_path[:-4] + '.' + self.file_type)
+        print('please wait')
+        self.output += generate_xlsx("YXLG", request_list, workbook)
+        self.output += generate_xlsx("PJFS", request_list, workbook)
+        workbook.close()
+        print('\n===================================end===================================')
+
+    def getOutput(self):
+        return self.output
+
